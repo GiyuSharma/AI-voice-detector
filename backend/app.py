@@ -1,9 +1,8 @@
 import os
-os.environ['KERAS_BACKEND'] = 'torch'
 
 from flask import Flask, request, jsonify, render_template, send_from_directory
 from flask_cors import CORS
-from keras.models import load_model
+from tensorflow.keras.models import load_model
 
 from utils import *
 

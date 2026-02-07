@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Voice Authentication System</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<!-- Video Background -->
+<div class="video-background">
+  <video autoplay muted loop playsinline>
+    <source src="/static/background-video.mp4" type="video/mp4">
+  </video>
+</div>
+
+<div class="header">
+  <div class="logo">
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+      <circle cx="16" cy="16" r="14" stroke="url(#gradient)" stroke-width="2"/>
+      <path d="M12 14C12 14 14 16 16 16C18 16 20 14 20 14" stroke="url(#gradient)" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="12" cy="11" r="1.5" fill="currentColor"/>
+      <circle cx="20" cy="11" r="1.5" fill="currentColor"/>
+      <defs>
+        <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#667eea"/>
+          <stop offset="100%" stop-color="#764ba2"/>
+        </linearGradient>
+      </defs>
+    </svg>
+    <span>VoiceAuth AI</span>
+  </div>
+  <div class="header-badges">
+    <span class="badge">🔒 Secure</span>
+    <span class="badge">⚡ Fast Analysis</span>
+  </div>
+</div>
+
+<div class="container">
+  <div class="hero-section">
+    <h1>AI-Powered Voice Authentication</h1>
+    <p class="subtitle">Advanced deepfake detection using neural network analysis</p>
+  </div>
+
+  <div class="upload-section">
+    <form id="uploadForm">
+      <div class="file-input-wrapper">
+        <input type="file" id="audioInput" accept=".wav,.mp3,.m4a,.ogg" required>
+        <label for="audioInput" class="file-label">
+          <div class="loader-icon" id="loaderIcon">
+            <svg viewBox="0 0 100 100" class="circular-loader">
+              <circle cx="50" cy="50" r="40" fill="none" stroke-width="4" stroke="#334155"/>
+              <circle cx="50" cy="50" r="40" fill="none" stroke-width="4" stroke="url(#loaderGradient)" stroke-dasharray="80 200" stroke-linecap="round" class="loader-path"/>
+              <defs>
+                <linearGradient id="loaderGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#667eea"/>
+                  <stop offset="50%" stop-color="#f093fb"/>
+                  <stop offset="100%" stop-color="#4facfe"/>
+                </linearGradient>
+              </defs>
+            </svg>
+            <svg class="plus-icon" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <line x1="12" y1="5" x2="12" y2="19"/>
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </div>
+          <div class="file-status">
+            <span class="file-text" id="fileStatusText">Click to upload or drag audio file</span>
+            <span class="file-subtext">or click to browse files</span>
+          </div>
+          <div class="format-badges">
+            <span class="format-badge">WAV</span>
+            <span class="format-badge">MP3</span>
+            <span class="format-badge">M4A</span>
+            <span class="format-badge">OGG</span>
+            <span class="format-info">• Max 50MB</span>
+          </div>
+        </label>
+      </div>
+      <button type="submit" class="analyze-btn">
+        <span>Analyze Audio</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="5" y1="12" x2="19" y2="12"/>
+          <polyline points="12 5 19 12 12 19"/>
+        </svg>
+      </button>
+    </form>
+  </div>
+
+  <div id="result" class="hidden">
+    <div class="result-header">
+      <h2>Analysis Complete</h2>
+      <div class="authenticity-score">
+        <div class="score-label">Deepfake Probability</div>
+        <div class="score-value" id="fakeText">0</div>
+        <div class="score-percent">%</div>
+      </div>
+    </div>
+
+    <div class="speedometer-container">
+      <h3>Authenticity Meter</h3>
+      <div class="speedometer">
+        <svg class="speedometer-svg" viewBox="0 0 300 300">
+          <defs>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+              <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+            <linearGradient id="needleGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#ff0000"/>
+              <stop offset="100%" stop-color="#cc0000"/>
+            </linearGradient>
+            <radialGradient id="rimGradient">
+              <stop offset="85%" stop-color="#1a1a1a"/>
+              <stop offset="90%" stop-color="#4facfe"/>
+              <stop offset="95%" stop-color="#0088cc"/>
+              <stop offset="100%" stop-color="#006699"/>
+            </radialGradient>
+          </defs>
+          
+          <!-- Outer glow -->
+          <circle cx="150" cy="150" r="145" fill="none" stroke="#4facfe" stroke-width="6" opacity="0.3" filter="url(#glow)"/>
+          
+          <!-- Outer rim -->
+          <circle cx="150" cy="150" r="142" fill="url(#rimGradient)" stroke="#4facfe" stroke-width="4"/>
+          
+          <!-- Inner black background -->
+          <circle cx="150" cy="150" r="130" fill="#000"/>
+          
+          <!-- Scale marks -->
+          <g id="scaleMarks"></g>
+          
+          <!-- Numbers arranged in perfect circle - equal angular spacing (36° each) -->
+          <text x="150" y="268" fill="#fff" font-size="18" font-weight="bold" text-anchor="middle">0</text>
+          <text x="112" y="260" fill="#4facfe" font-size="13" font-weight="bold" text-anchor="middle">10</text>
+          <text x="78" y="238" fill="#4facfe" font-size="13" font-weight="bold" text-anchor="middle">20</text>
+          <text x="54" y="206" fill="#4facfe" font-size="13" font-weight="bold" text-anchor="middle">30</text>
+          <text x="44" y="168" fill="#10b981" font-size="13" font-weight="bold" text-anchor="middle">40</text>
+          <text x="52" y="128" fill="#10b981" font-size="13" font-weight="bold" text-anchor="middle">50</text>
+          <text x="76" y="94" fill="#10b981" font-size="15" font-weight="bold" text-anchor="middle">60</text>
+          <text x="110" y="72" fill="#10b981" font-size="13" font-weight="bold" text-anchor="middle">70</text>
+          <text x="150" y="64" fill="#f59e0b" font-size="15" font-weight="bold" text-anchor="middle">80</text>
+          <text x="190" y="72" fill="#f59e0b" font-size="13" font-weight="bold" text-anchor="middle">90</text>
+          <text x="224" y="94" fill="#ef4444" font-size="15" font-weight="bold" text-anchor="middle">100</text>
+          
+          <!-- Center display box - positioned below needle -->
+          <rect x="110" y="195" width="80" height="35" fill="#0a0a0a" stroke="#333" stroke-width="2" rx="4"/>
+          <text id="speedValue" x="150" y="220" fill="#ff3333" font-size="24" font-weight="bold" text-anchor="middle">0</text>
+          <text x="150" y="240" fill="#666" font-size="10" text-anchor="middle">FAKE %</text>
+          
+          <!-- Needle group -->
+          <g id="needleGroup" style="transform: rotate(180deg); transform-origin: 150px 150px;">
+            <path d="M 148 150 L 146 65 L 150 60 L 154 65 L 152 150 Z" 
+                  fill="url(#needleGradient)" 
+                  stroke="#000" 
+                  stroke-width="1"
+                  filter="url(#glow)"/>
+            <!-- Center hub -->
+            <circle cx="150" cy="150" r="12" fill="#1a1a1a" stroke="#666" stroke-width="2"/>
+            <circle cx="150" cy="150" r="8" fill="#333" stroke="#ff0000" stroke-width="2"/>
+            <circle cx="150" cy="150" r="4" fill="#ff0000"/>
+          </g>
+        </svg>
+      </div>
+      <div class="speedometer-conclusion">
+        <p>The authenticity meter provides a real-time visual representation of the deepfake probability score using advanced neural network classification. The needle position indicates the confidence level of AI-generated voice detection, with green zone representing authentic human speech and red zone showing synthetic voice patterns. This speedometer-style gauge allows quick visual assessment of audio authenticity at a glance.</p>
+      </div>
+    </div>
+
+    <div class="chart-section">
+      <h3>Real-time Probability Analysis</h3>
+      <div class="chart-wrapper">
+        <canvas id="realtimeChart"></canvas>
+      </div>
+      <div class="analysis-conclusion">
+        <p>This real-time probability graph displays frame-by-frame deepfake detection scores throughout the audio timeline. The continuous line represents the fluctuation of AI voice probability across different time segments, helping identify specific portions where synthetic patterns are strongest. Peaks in this graph indicate moments with higher likelihood of artificial voice generation, while valleys suggest more authentic speech characteristics.</p>
+      </div>
+    </div>
+
+    <div class="visualizations">
+      <div class="viz-card">
+        <h4>Mel Spectrogram</h4>
+        <img id="spectrogram" alt="Mel Spectrogram">
+        <div class="viz-conclusion">
+          <p>The Mel Spectrogram visualizes frequency distribution over time using the Mel scale, which mimics human auditory perception. This representation reveals harmonic structures, pitch variations, and spectral patterns in the audio signal. Synthetic voices often exhibit unnatural uniformity in frequency bands and missing harmonic overtones, which appear as distinctive patterns in this spectrogram analysis.</p>
+        </div>
+      </div>
+      <div class="viz-card">
+        <h4>Timeline Analysis</h4>
+        <img id="timeline" alt="Timeline">
+        <div class="viz-conclusion">
+          <p>Timeline analysis tracks the progression of deepfake probability across temporal segments of the audio file. This visualization helps identify consistency patterns and temporal anomalies in voice characteristics. Sudden spikes or unusual variations may indicate splice points, voice synthesis artifacts, or transitions between authentic and manipulated audio segments throughout the recording.</p>
+        </div>
+      </div>
+      <div class="viz-card">
+        <h4>Intensity Heatmap</h4>
+        <img id="heatmap" alt="Heatmap">
+        <div class="viz-conclusion">
+          <p>The intensity heatmap displays energy distribution across frequency bins and time frames, highlighting areas of suspicious vocal activity. Warmer colors indicate higher fake intensity, revealing regions where AI-generated artifacts are concentrated. This thermal visualization exposes unnatural energy patterns, spectral discontinuities, and frequency anomalies characteristic of synthetic voice generation technologies.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="summary-section">
+      <h3>🤖 AI Analysis Summary</h3>
+      <div class="summary-card">
+        <p id="summary"></p>
+      </div>
+    </div>
+
+    <div class="table-section">
+      <h3>📊 Frame-wise Analysis</h3>
+      <div class="table-wrapper">
+        <table id="frameTable">
+          <thead>
+            <tr>
+              <th>Frame</th>
+              <th>Probability (%)</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="analysis-conclusion">
+        <p>The frame-wise analysis table presents granular detection results for individual audio segments, offering precise probability scores for each temporal frame. This detailed breakdown enables forensic-level examination of voice authenticity across the entire audio duration. Each frame is classified with status indicators, allowing investigators to pinpoint exact locations of potential manipulation and assess the overall consistency of the voice sample.</p>
+      </div>
+    </div>
+
+    <div class="action-buttons">
+      <a id="reportLink" target="_blank" class="download-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Download PDF Report
+      </a>
+    </div>
+  </div>
+</div>
+
+<script src="/static/script.js"></script>
+</body>
+</html>
